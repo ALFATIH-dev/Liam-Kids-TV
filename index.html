@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anime Quotes Pro</title>
+<title>Anime Quotes Viral</title>
 
 <style>
 body {
@@ -16,11 +16,11 @@ body {
   color: white;
   background-size: cover;
   background-position: center;
-  transition: background 0.5s ease;
+  transition: 0.5s;
 }
 
 .overlay {
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.65);
   padding: 30px;
   border-radius: 20px;
   text-align: center;
@@ -28,12 +28,13 @@ body {
 }
 
 #quote {
-  opacity: 0;
-  transition: opacity 0.5s;
+  min-height: 60px;
+  margin-top: 10px;
+  font-size: 16px;
 }
 
 button {
-  margin-top: 10px;
+  margin-top: 8px;
   padding: 10px;
   width: 100%;
   border: none;
@@ -49,13 +50,14 @@ button:hover {
 </style>
 </head>
 
-<body id="body">
+<body>
 
 <div class="overlay">
   <h2>Anime Quotes 🎬</h2>
-  <p id="quote">Klik tombol dulu...</p>
+  <p id="quote">Klik mulai...</p>
 
   <button onclick="generate()">🎲 Generate</button>
+  <button onclick="copyText()">📋 Copy</button>
   <button onclick="share()">📤 Share WA</button>
 </div>
 
@@ -78,28 +80,49 @@ const backgrounds = [
   "https://images.unsplash.com/photo-1519125323398-675f0ddb6308"
 ];
 
+let current = 0;
+
+// efek ketik
+function typeText(text, element) {
+  element.innerHTML = "";
+  let i = 0;
+
+  let interval = setInterval(() => {
+    element.innerHTML += text[i];
+    i++;
+    if (i >= text.length) clearInterval(interval);
+  }, 30);
+}
+
 function generate() {
+  current = Math.floor(Math.random() * quotes.length);
+  update();
+}
+
+function update() {
   let quoteEl = document.getElementById("quote");
 
-  quoteEl.style.opacity = 0;
+  let bg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+  document.body.style.backgroundImage = "url('" + bg + "')";
 
-  setTimeout(() => {
-    let q = quotes[Math.floor(Math.random() * quotes.length)];
-    let bg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+  typeText(quotes[current], quoteEl);
+}
 
-    quoteEl.innerText = q;
-    document.body.style.backgroundImage = "url('" + bg + "')";
-
-    quoteEl.style.opacity = 1;
-  }, 300);
+function copyText() {
+  let text = quotes[current];
+  navigator.clipboard.writeText(text);
+  alert("Copied!");
 }
 
 function share() {
-  let text = document.getElementById("quote").innerText;
-  let url = "https://wa.me/?text=" + encodeURIComponent(text);
-
+  let url = "https://wa.me/?text=" + encodeURIComponent(quotes[current]);
   window.open(url, "_blank");
 }
+
+// auto generate tiap 10 detik
+setInterval(() => {
+  generate();
+}, 10000);
 </script>
 
 </body>
