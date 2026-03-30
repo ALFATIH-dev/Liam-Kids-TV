@@ -3,36 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Anime Quotes</title>
+<title>Anime Quotes Pro</title>
 
 <style>
 body {
-  font-family: Arial;
-  background: linear-gradient(135deg, #141e30, #243b55);
-  color: white;
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  margin: 0;
+  color: white;
+  background-size: cover;
+  background-position: center;
+  transition: background 0.5s ease;
 }
 
-.box {
-  text-align: center;
-  background: rgba(255,255,255,0.1);
+.overlay {
+  background: rgba(0,0,0,0.6);
   padding: 30px;
-  border-radius: 15px;
-  width: 300px;
+  border-radius: 20px;
+  text-align: center;
+  width: 320px;
+}
+
+#quote {
+  opacity: 0;
+  transition: opacity 0.5s;
 }
 
 button {
-  margin-top: 15px;
+  margin-top: 10px;
   padding: 10px;
   width: 100%;
   border: none;
+  border-radius: 10px;
   background: #ff4081;
   color: white;
-  border-radius: 10px;
   cursor: pointer;
 }
 
@@ -42,12 +49,14 @@ button:hover {
 </style>
 </head>
 
-<body>
+<body id="body">
 
-<div class="box">
+<div class="overlay">
   <h2>Anime Quotes 🎬</h2>
-  <p id="quote">Klik tombol untuk quotes</p>
-  <button onclick="generate()">Generate</button>
+  <p id="quote">Klik tombol dulu...</p>
+
+  <button onclick="generate()">🎲 Generate</button>
+  <button onclick="share()">📤 Share WA</button>
 </div>
 
 <script>
@@ -56,13 +65,40 @@ const quotes = [
   "Aku akan menjadi Raja Bajak Laut! - Luffy",
   "Kekuatan datang dari tekad. - Tanjiro",
   "Jika kau tidak berjuang, kau tidak akan menang. - Eren",
-  "Manusia menjadi kuat karena mereka punya sesuatu untuk dilindungi. - HxH",
-  "Kesempatan hanya datang bagi mereka yang siap. - Haikyuu"
+  "Manusia menjadi kuat karena mereka punya sesuatu untuk dilindungi.",
+  "Kesempatan hanya datang bagi mereka yang siap.",
+  "Hidup bukan tentang menang atau kalah, tapi tentang bertahan.",
+  "Aku tidak takut mati, aku takut tidak mencoba."
+];
+
+const backgrounds = [
+  "https://images.unsplash.com/photo-1541560052-77ec1bbc09f7",
+  "https://images.unsplash.com/photo-1506744038136-46273834b3fb",
+  "https://images.unsplash.com/photo-1522120692920-d1f9d0fbe6c4",
+  "https://images.unsplash.com/photo-1519125323398-675f0ddb6308"
 ];
 
 function generate() {
-  let random = quotes[Math.floor(Math.random() * quotes.length)];
-  document.getElementById("quote").innerText = random;
+  let quoteEl = document.getElementById("quote");
+
+  quoteEl.style.opacity = 0;
+
+  setTimeout(() => {
+    let q = quotes[Math.floor(Math.random() * quotes.length)];
+    let bg = backgrounds[Math.floor(Math.random() * backgrounds.length)];
+
+    quoteEl.innerText = q;
+    document.body.style.backgroundImage = "url('" + bg + "')";
+
+    quoteEl.style.opacity = 1;
+  }, 300);
+}
+
+function share() {
+  let text = document.getElementById("quote").innerText;
+  let url = "https://wa.me/?text=" + encodeURIComponent(text);
+
+  window.open(url, "_blank");
 }
 </script>
 
